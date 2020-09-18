@@ -1,0 +1,196 @@
+---
+title: "Translation Selection and Codon Usage Bias Analysis (assignment)"
+output: github_document
+  html_document:
+    df_print: paged
+
+---
+
+
+
+**Target organisms: Saccharomyces cerevisiae**
+
+# Step 1, Data availability and downloading:
+
+- As the effect of codon usage and translation selection can take place only on coding sequences (CDS).
+First, we will download the Saccharomyces cerevisiae CDS from https://github.com/AliYoussef96/CUBex/blob/master/S.cerevisia_CDS.fasta.
+
+- To correlate the Saccharomyces cerevisiae protein abundance, we will download the protein information from the PAXdb. The CSV file is available at https://github.com/AliYoussef96/CUBex/blob/master/S.cerevisia_PA_data.csv.
+
+# Step 2, Required packages to install.
+
+The first package we will use for the CUB analysis is named vhcub.  vhcub is available on CRAN as well as GitHub https://github.com/AliYoussef96/vhcub and published on https://f1000research.com/articles/8-2137/v1.
+
+**or**
+
+```{r eval=F}
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("coRdon")
+BiocManager::install("Biostrings")
+
+
+install.packages("vhcub")
+
+```
+
+
+The second package we will use for this project is ggplot2 for visualization.
+
+```{r eval=F}
+install.packages("ggplot2")
+install.packages("dplyr")
+```
+
+# Step 3, Reading the data in R.
+
+```{r}
+library("vhcub")
+library("ggplot2")
+library("Biostrings")
+library("dplyr")
+
+
+fasta <- fasta.read("S.cerevisia_CDS.fasta","S.cerevisia_CDS.fasta")
+fasta.org <- fasta[[1]]
+```
+
+# Step 4, Calculating the CUB on the CDS level.
+
+**First, using the ENc index.**
+
+Calculate the ENc;
+
+```{r}
+## write your code here
+
+enc.df <- 
+head(enc.df, 10)
+
+```
+
+Using the scatter plot in the ggplot2, visualize the ENc;
+
+```{r}
+enc.df$index <- row.names(enc.df)
+
+## write your code here
+```
+
+**reference genes**
+
+Read the protein abundance file, sort the values by the abundance and extract the first 5%;
+
+```{r}
+pa <- read.csv("S.cerevisia_PA_data.csv")
+
+## write your code here
+```
+
+Extract the reference genes from the original fasta file;
+
+```{r}
+ref_genes <- data.frame()
+
+## write your code here
+
+
+enc.ref.gene <- ENc.values(ref_genes)
+```
+
+
+**Second, using the CAI index.**
+
+Calculate the CAI;
+
+```{r}
+
+cai.df <- ## write your code here
+
+cai.df <- cai.df[cai.df$CAI <= 1,]
+
+head(cai.df, 10)
+```
+
+Using the box-plot in the ggplot2, visualize the CAI;
+
+
+```{r}
+## write your code here
+
+```
+
+
+# Step 5, Identifying preferred codons.
+
+```{r}
+rscu.ref.genes <- ## write your code here
+
+rscu.ref.genes.mean <- ## write your code here
+
+colnames(rscu.ref.genes.mean) <- "rscu"
+rscu.ref.genes.mean$codons <- row.names(rscu.ref.genes.mean)
+```
+
+Using the bar plot in the ggplot2, visualize the RSCU;
+
+
+```{r}
+## write your code here
+```
+
+Translate the codons to the corresponding amino acid;
+
+```{r}
+rscu.ref.genes.mean$codons <- ## write your code here
+
+codon.to.aa <- function(codon){
+  return(GENETIC_CODE[[codon]])
+}
+
+aa <- ## write your code here
+aa <- ## write your code here
+rscu.ref.genes.mean$aa <- aa
+```
+
+Get the maximum RSCU codon value for each amino acid;
+
+
+```{r}
+
+p.codons <- ## write your code here
+p.codons <- p.codons %>% filter(!aa %in% c("*","M","W"))
+
+```
+
+and explain line 2 in the above lines;
+
+```
+## write your answer here
+
+```
+
+Using the bar plot in the ggplot2, visualize the RSCU (preferred codons);
+
+
+```{r}
+
+## write your code here
+
+```
+
+
+Remove any RSCU less than one (if any), and visualize it again;
+
+```{r}
+
+p.codons <- ## write your code here
+
+## write your code here
+
+```
+
+# Please explain the results from a biological point of view and its applications.
+
+**write your answer here**
+
